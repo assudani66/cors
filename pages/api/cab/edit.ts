@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import { supabase } from "../../services/supabaseClient"
+import { supabase } from "../../../services/supabaseClient"
 
 const allowCors = (fn:any) => async (req:NextApiRequest, res:any) => {
     res.setHeader('Access-Control-Allow-Credentials', true)
@@ -18,11 +18,16 @@ const allowCors = (fn:any) => async (req:NextApiRequest, res:any) => {
   
   const handler = async(req:NextApiRequest, res:NextApiResponse) => {
     const requestQuery = req.query
-    const {data} = await supabase.from('cab').insert({
-        model_number: 'i20',
-        color:"black",
-    })
-    res.json({"message":data})
+    
+    const nousedCall = await supabase.from('cab').upsert({
+        id:requestQuery.cabid,
+        model_number: 'i40',
+        color:"grt",
+    }).eq('id',requestQuery.cabid)
+
+    const {data} = await supabase.from('cab').select().eq('id',requestQuery.cabid)
+   
+    res.json({data})
   }
   
   module.exports = allowCors(handler)
