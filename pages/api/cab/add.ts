@@ -17,12 +17,13 @@ const allowCors = (fn:any) => async (req:NextApiRequest, res:any) => {
   }
   
   const handler = async(req:NextApiRequest, res:NextApiResponse) => {
-    const requestQuery = req.query
-    const {data} = await supabase.from('cab').insert({
-        model_number: 'i20',
-        color:"black",
+    const requestBody = req.body
+    const addCab = await supabase.from('cab').insert({
+      model_number: requestBody.model_number,
+      color:requestBody.color,
     })
-    res.json({"message":data})
+
+    res.json({"message":'create cab'})
   }
   
   module.exports = allowCors(handler)

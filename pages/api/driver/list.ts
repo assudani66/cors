@@ -20,12 +20,13 @@ const allowCors = (fn:any) => async (req:NextApiRequest, res:any) => {
 
     const requestQuery = req.query
 
-    if(requestQuery.cabid){
+    if(requestQuery.driverid){
+      console.log(req.query ,"exists")
       try {
         const {data,error} = await supabase
-        .from('cab')
+        .from('driver')
         .select()
-        .eq("id",requestQuery.cabid)
+        .eq("id",requestQuery.driverid)
         res.json({data})
 
         if(error) throw error
@@ -37,7 +38,7 @@ const allowCors = (fn:any) => async (req:NextApiRequest, res:any) => {
     }else{
       try {
           const {data,error} = await supabase
-          .from('cab')
+          .from('driver')
           .select()
           .order('created_at')
 

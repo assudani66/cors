@@ -19,38 +19,19 @@ const allowCors = (fn:any) => async (req:NextApiRequest, res:any) => {
   const handler = async(req:NextApiRequest, res:NextApiResponse) => {
 
     const requestQuery = req.query
+    const requestBody = req.body
 
-    if(requestQuery.cabid){
-      try {
-        const {data,error} = await supabase
-        .from('cab')
-        .select()
-        .eq("id",requestQuery.cabid)
-        res.json({data})
+    const editedDriverRequest = await supabase.from('driver').upsert({
+      id:requestQuery.driverid,
+      name: requestBody.name,
+      email:requestBody.email,
+      phone_number:requestBody.phone_number,
+      rating:requestBody.rating
+    }).eq('id',requestQuery.driverid)
 
-        if(error) throw error
-    } catch (error) {
-        res.json({message:error})
-        console.error(error)
-    }
-  
-    }else{
-      try {
-          const {data,error} = await supabase
-          .from('cab')
-          .select()
-          .order('created_at')
-
-          // const {data} = await supabase.from()
-  
-          res.json({data})
-  
-          if(error) throw error
-      } catch (error) {
-          res.json({message:error})
-          console.error(error)
-      }
-    }
+    const {data} = await supabase.from('driver').select().eq('id',requestQuery.driverid)
+   
+    res.json({data})
   }
   
   module.exports = allowCors(handler)

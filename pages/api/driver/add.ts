@@ -17,40 +17,15 @@ const allowCors = (fn:any) => async (req:NextApiRequest, res:any) => {
   }
   
   const handler = async(req:NextApiRequest, res:NextApiResponse) => {
+    const requestBody = req.body
+    const {data} = await supabase.from('driver').insert({
+        name: requestBody.name,
+        email:requestBody.email,
+        phone_number:requestBody.phone_number,
+        rating:requestBody.rating
+    })
 
-    const requestQuery = req.query
-
-    if(requestQuery.cabid){
-      try {
-        const {data,error} = await supabase
-        .from('cab')
-        .select()
-        .eq("id",requestQuery.cabid)
-        res.json({data})
-
-        if(error) throw error
-    } catch (error) {
-        res.json({message:error})
-        console.error(error)
-    }
-  
-    }else{
-      try {
-          const {data,error} = await supabase
-          .from('cab')
-          .select()
-          .order('created_at')
-
-          // const {data} = await supabase.from()
-  
-          res.json({data})
-  
-          if(error) throw error
-      } catch (error) {
-          res.json({message:error})
-          console.error(error)
-      }
-    }
+    res.json({"message":'created driver'})
   }
   
   module.exports = allowCors(handler)

@@ -18,11 +18,11 @@ const allowCors = (fn:any) => async (req:NextApiRequest, res:any) => {
   
   const handler = async(req:NextApiRequest, res:NextApiResponse) => {
     const requestQuery = req.query
-    
-    const nousedCall = await supabase.from('cab').upsert({
+    const requestBody  = req.body
+    const usedCall = await supabase.from('cab').update({
         id:requestQuery.cabid,
-        model_number: 'i40',
-        color:"grt",
+        model_number: requestBody.model_number,
+        color:requestBody.color,
     }).eq('id',requestQuery.cabid)
 
     const {data} = await supabase.from('cab').select().eq('id',requestQuery.cabid)
