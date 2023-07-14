@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { supabase } from "../../../services/supabaseClient"
+import { error } from "console"
 
 const allowCors = (fn:any) => async (req:NextApiRequest, res:any) => {
     res.setHeader('Access-Control-Allow-Credentials', true)
@@ -18,12 +19,13 @@ const allowCors = (fn:any) => async (req:NextApiRequest, res:any) => {
   
   const handler = async(req:NextApiRequest, res:NextApiResponse) => {
     const requestBody = req.body
-    const {data} = await supabase.from('driver').insert({
+    const {data,error} = await supabase.from('driver').insert({
         name: requestBody.name,
         email:requestBody.email,
         phone_number:requestBody.phone_number,
         rating:requestBody.rating
     })
+    // console.log(error)
 
     res.json({"message":'created driver'})
   }

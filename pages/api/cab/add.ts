@@ -20,6 +20,8 @@ const allowCors = (fn:any) => async (req:NextApiRequest, res:any) => {
     const requestBody = req.body
     const addCab = await supabase.from('cab').insert({
       model_number: requestBody.model_number,
+      name:requestBody.name,
+      registration_number:requestBody.registration_number,
       color:requestBody.color,
     })
 

@@ -25,6 +25,7 @@ const allowCors = (fn:any) => async (req:NextApiRequest, res:any) => {
       id:requestQuery.driverid,
       name: requestBody.name,
       email:requestBody.email,
+      assigned_cab:requestBody.assigned_cab,
       phone_number:requestBody.phone_number,
       rating:requestBody.rating
     }).eq('id',requestQuery.driverid)

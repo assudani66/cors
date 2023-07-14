@@ -21,13 +21,17 @@ const allowCors = (fn:any) => async (req:NextApiRequest, res:any) => {
     const requestBody  = req.body
     const usedCall = await supabase.from('cab').update({
         id:requestQuery.cabid,
+        name:requestBody.name,
+        registration_number:requestBody.registration_number,
         model_number: requestBody.model_number,
+        assigned_driver:requestBody.assigned_driver,
         color:requestBody.color,
     }).eq('id',requestQuery.cabid)
 
     const {data} = await supabase.from('cab').select().eq('id',requestQuery.cabid)
    
     res.json({data})
+
   }
   
   module.exports = allowCors(handler)
